@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\RegisterUser;
+use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
 {
@@ -62,4 +63,39 @@ class AuthController extends Controller
             ]);
         }
     }
+
+    public function reset_password_otp(Request $request){
+        $request->validate([
+            'email' => 'email|required',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if($user){
+
+           // Notification::send($user, new ResetPassword());
+
+            return response()->json([
+                'message' => 'OTP sent successfully',
+            ]);
+        }else{
+            return response()->json([
+                'message' => 'User not found',
+            ]);
+        }
+    }
+
+    public function generate_reset_password_token(Request $request){
+        $request->validate([
+            'email' => 'email|required',
+            'otp' => 'required',
+        ]);
+        $otp_object = new \Otp;
+        $otp = $otp_object->validate($request->email, $request->otp);
+        if($otp->status){
+            $user = User::where('email', $request->email)->first();
+            // TODO: create password reset token  
+        
+
+    }
+}
 }

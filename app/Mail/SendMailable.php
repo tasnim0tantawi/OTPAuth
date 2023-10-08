@@ -28,6 +28,7 @@ class SendMailable extends Mailable
     {
         return new Envelope(
             subject: 'Send Mailable',
+            
         );
     }
 

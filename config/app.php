@@ -185,7 +185,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
-        'Otp' => Ichtrojan\Otp\Facades\Otp::class,
+        'Otp' => Ichtrojan\Otp\Otp::class,
+
     ])->toArray(),
+    
 
 ];

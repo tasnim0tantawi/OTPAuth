@@ -34,4 +34,32 @@ class AuthController extends Controller
             'token_type' => 'Bearer',
         ]);
     }
+
+    public function verify_email(Request $request){
+        $request->validate([
+            'email' => 'email|required',
+            'otp' => 'required',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if($user){
+            $otp_object = new \Otp;
+            $otp = $otp_object->validate($request->email, $request->otp);
+            if($otp->status){
+                $user->email_verified_at = now();
+                $user->save();
+                return response()->json([
+                    'message' => 'Email verified successfully',
+                ]);
+            }else{
+                return response()->json([
+                    'message' => 'Invalid OTP',
+                ]);
+            }
+        }else{
+            return response()->json([
+                'message' => 'User not found',
+            ]);
+        }
+    }
 }
